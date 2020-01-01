@@ -90,7 +90,6 @@ byte bitsToRead = COUNT_BITS_STANDARD;
 bool hAxisHeld = false;
 bool vAxisHeld = false;
 
-// the setup function runs once when you press reset or power the board
 void setup() {
   // initialize controller I/O
   pinMode(PIN_CLOCK, OUTPUT);
@@ -138,7 +137,6 @@ void loop() {
       Joystick.setXAxis(state ? 1 : 0);
     }
     delayMicroseconds(6);
-    digitalWrite(PIN_CLOCK, HIGH);
   }
 }
 
