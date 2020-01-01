@@ -137,6 +137,7 @@ void loop() {
       Joystick.setXAxis(state ? 1 : 0);
     }
     delayMicroseconds(6);
+    digitalWrite(PIN_CLOCK, HIGH);
   }
 }
 
