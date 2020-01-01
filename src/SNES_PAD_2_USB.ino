@@ -86,7 +86,7 @@ Joystick_ Joystick(JOYSTICK_DEFAULT_REPORT_ID, JOYSTICK_TYPE_GAMEPAD,
                    false, false,           // No rudder or throttle
                    false, false, false);   // No accelerator, brake, or steering
 
-byte bitsToRead = 16;
+byte bitsToRead = COUNT_BITS_STANDARD;
 bool hAxisHeld = false;
 bool vAxisHeld = false;
 
@@ -115,33 +115,26 @@ void loop() {
     digitalWrite(PIN_CLOCK, LOW);
 
     bool state = i < bitsToRead ? !((bool)digitalRead(PIN_DATA)) : false;
-    if (!inArray(i, BUTTONS_TO_IGNORE, sizeof(BUTTONS_TO_IGNORE) / sizeof(BUTTONS_TO_IGNORE[0])))
-    {
+    if (!inArray(i, BUTTONS_TO_IGNORE, sizeof(BUTTONS_TO_IGNORE) / sizeof(BUTTONS_TO_IGNORE[0]))) {
       Joystick.setButton(BUTTON_BIT_TO_USB_BUTTON[i], state);
     }
-    else if (i == BUTTON_IS_NTT_DATAPAD)
-    {
-      if(updateBitsToRead(state)) // returns true if NTT DATAPAD has been plugged in or unplugged. We start the whole loop over.
-      {
+    else if (i == BUTTON_IS_NTT_DATAPAD) {
+      if (updateBitsToRead(state)) { // returns true if NTT DATAPAD has been plugged in or unplugged. We start the whole loop over.
         break;
       }
     }
-    else if (i == BUTTON_UP && state)
-    {
+    else if (i == BUTTON_UP && state) {
       vAxisHeld = true;
       Joystick.setYAxis(-1);
     }
-    else if (i == BUTTON_DOWN && !vAxisHeld)
-    {
+    else if (i == BUTTON_DOWN && !vAxisHeld) {
       Joystick.setYAxis(state ? 1 : 0);
     }
-    else if (i == BUTTON_LEFT && state)
-    {
+    else if (i == BUTTON_LEFT && state) {
       hAxisHeld = true;
       Joystick.setXAxis(-1);
     }
-    else if (i == BUTTON_RIGHT && !hAxisHeld)
-    {
+    else if (i == BUTTON_RIGHT && !hAxisHeld) {
       Joystick.setXAxis(state ? 1 : 0);
     }
     delayMicroseconds(6);
@@ -149,34 +142,27 @@ void loop() {
   }
 }
 
-bool updateBitsToRead(byte state)
-{
+bool updateBitsToRead(byte state) {
   byte oldBitsToRead = bitsToRead;
   bitsToRead = state ? COUNT_BITS_NTT : COUNT_BITS_STANDARD;
-  if(oldBitsToRead != bitsToRead) // If an NTT DATAPAD has been plugged in our unplugged, reset all buttons and return true
-  {
+  if (oldBitsToRead != bitsToRead) { // If an NTT DATAPAD has been plugged in our unplugged, reset all buttons and return true
     resetButtons();
     return true;
   }
   return false;
 }
 
-void resetButtons()
-{
-  for(int i = 0; i < 23; i++)
-  {
+void resetButtons() {
+  for (int i = 0; i < 23; i++) {
     Joystick.setButton(i, 0);
   }
   Joystick.setYAxis(0);
   Joystick.setXAxis(0);
 }
 
-bool inArray(byte needle, byte haystack[], int haystackSize)
-{
-  for (int i = 0; i < haystackSize; i++)
-  {
-    if (haystack[i] == needle)
-    {
+bool inArray(byte needle, byte haystack[], int haystackSize) {
+  for (int i = 0; i < haystackSize; i++) {
+    if (haystack[i] == needle) {
       return true;
     }
   }
