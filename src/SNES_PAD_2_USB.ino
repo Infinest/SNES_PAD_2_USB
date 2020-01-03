@@ -94,7 +94,7 @@ void setup() {
   // initialize controller I/O
   pinMode(PIN_CLOCK, OUTPUT);
   pinMode(PIN_LATCH, OUTPUT);
-  pinMode(PIN_DATA, INPUT);
+  pinMode(PIN_DATA, INPUT_PULLUP);
 
   // Initialize joystick
   Joystick.begin();
